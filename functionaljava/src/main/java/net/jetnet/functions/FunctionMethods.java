@@ -1,4 +1,4 @@
-package functions;
+package net.jetnet.functions;
 
 public class FunctionMethods {
     /*
