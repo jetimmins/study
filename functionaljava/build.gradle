@@ -12,10 +12,9 @@ repositories {
 }
 
 subprojects {
-    dependencies {
-        testImplementation "org.mockito:mockito-all:$mockitoVersion"
-        testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
-    }
+
 }
 dependencies {
+    testImplementation "org.mockito:mockito-all:$mockitoVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
 }
