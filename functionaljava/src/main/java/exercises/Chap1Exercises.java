@@ -1,8 +1,9 @@
-package net.jetnet.functions;
+package exercises;
 
 import jdk.internal.net.http.common.Pair;
+import net.jetnet.functions.Function;
 
-public class FunctionMethods {
+public class Chap1Exercises {
     /*
     2.1: Write the compose method for functions of integer
     2.2: Simplify using lambdas
@@ -51,7 +52,7 @@ public class FunctionMethods {
 
     //type inference fails so defaults to <Object> which is not variant with parameterised functions
     public void useHigherCompose() {
-        FunctionMethods.<Integer, Integer, Integer>higherCompose().apply(square).apply(triple).apply(5);
+        Chap1Exercises.<Integer, Integer, Integer>higherCompose().apply(square).apply(triple).apply(5);
     }
 
     /*
@@ -69,7 +70,7 @@ public class FunctionMethods {
     }
 
     public void usePartialApply() {
-        Function<Integer, Integer> g = FunctionMethods.partialApply(5, x -> y -> x * y);
+        Function<Integer, Integer> g = Chap1Exercises.partialApply(5, x -> y -> x * y);
         g.apply(3);
     }
 
@@ -92,7 +93,7 @@ public class FunctionMethods {
     }
 
     public void useCurried() {
-        FunctionMethods.curried().apply("a").apply("b").apply("c").apply("d");
+        Chap1Exercises.curried().apply("a").apply("b").apply("c").apply("d");
     }
 
     /*

@@ -31,4 +31,12 @@ public interface Function<T, U> {
     static <T, U, V> Function<Function<T, U>, Function<Function<V, T>, Function<V, U>>> andThen() {
         return x -> y -> y.andThen(x);
     }
+
+    static <T, U, V> Function<Function<T, U>, Function<Function<U, V>, Function<T, V>>> higherAndThen() {
+        return x -> y -> z -> y.apply(x.apply(z));
+    }
+
+    static <T, U, V> Function<Function<U, V>, Function<Function<T, U>, Function<T, V>>> higherCompose() {
+        return x -> y -> z -> x.apply(y.apply(z));
+    }
 }
