@@ -1,7 +1,7 @@
 package exercises;
 
-import jdk.internal.net.http.common.Pair;
 import net.jetnet.functions.Function;
+import net.jetnet.functions.Tuple;
 
 public class Chap1Exercises {
     /*
@@ -99,8 +99,8 @@ public class Chap1Exercises {
     /*
     2.10: Write a method to curry a function of a Tuple<A, B> to C
      */
-    public <A, B, C> Function<A, Function<B, C>> curryFunction(Function<Pair<A, B>, C> f) {
-        return a -> b -> f.apply(Pair.pair(a, b));
+    public <A, B, C> Function<A, Function<B, C>> curryFunction(Function<Tuple<A, B>, C> f) {
+        return a -> b -> f.apply(new Tuple<>(a, b));
     }
 
     public <A, B, C> Function<B, Function<A, C>> swapArguments(Function<A, Function<B, C>> f) {
