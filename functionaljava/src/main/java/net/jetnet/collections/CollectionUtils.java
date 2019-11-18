@@ -1,5 +1,6 @@
 package net.jetnet.collections;
 
+import net.jetnet.functions.Effect;
 import net.jetnet.functions.Function;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class CollectionUtils {
         return Collections.unmodifiableList(work);
     }
 
-    public static <T> List<T> prepend(List<T> list, T element) {
+    public static <T> List<T> prepend(T element, List<T> list) {
         return foldLeft(list, list(element), x -> y -> append(x, y));
     }
 
@@ -74,21 +75,58 @@ public class CollectionUtils {
 
     public static <T, U> U recursiveFoldRight(List<T> list, U identity, Function<T, Function<U, U>> fold) {
         return list.isEmpty() ? identity :
-            fold.apply(head(list))
-                .apply(recursiveFoldRight(tail(list), identity, fold));
+                fold.apply(head(list))
+                        .apply(recursiveFoldRight(tail(list), identity, fold));
     }
 
     public static <T> List<T> reverse(List<T> list) {
-        return Collections.unmodifiableList(foldLeft(list, list(), x -> y -> prepend(x, y)));
+        return Collections.unmodifiableList(foldLeft(list, list(), x -> y -> prepend(y, x)));
     }
 
     public static <T, U> List<U> map(List<T> list, Function<T, U> map) {
         List<U> result = list();
-        for(T element : list) {
+        for (T element : list) {
             foldLeft(list, list(), x -> y -> append(x, map.apply(element)));
         }
 
         return Collections.unmodifiableList(result);
+    }
+
+    public static <T> void foreach(List<T> list, Effect<T> effect) {
+        for (T element : list) {
+            effect.apply(element);
+        }
+    }
+
+    public static List<Integer> range(int start, int end) {
+        List<Integer> list = list();
+        int index = start;
+        while (index < end) {
+            append(list, index);
+            index++;
+        }
+
+        return list;
+    }
+
+    public static <T> List<T> unfold(T seed, Function<T, T> unfold, Function<T, Boolean> predicate) {
+        List<T> list = list();
+        T index = seed;
+        while (predicate.apply(index)) {
+            append(list, index);
+            index = unfold.apply(index);
+        }
+        return list;
+    }
+
+    public static List<Integer> unfoldRange(int start, int end) {
+        return unfold(start, x -> x++, x -> x < end);
+    }
+
+    public static List<Integer> recursiveRange(Integer start, Integer end) {
+        return end <= start ?
+                list() :
+                prepend(start, range(start++, end));
     }
 
 }
