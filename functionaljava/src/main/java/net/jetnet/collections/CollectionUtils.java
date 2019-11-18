@@ -82,4 +82,13 @@ public class CollectionUtils {
         return Collections.unmodifiableList(foldLeft(list, list(), x -> y -> prepend(x, y)));
     }
 
+    public static <T, U> List<U> map(List<T> list, Function<T, U> map) {
+        List<U> result = list();
+        for(T element : list) {
+            foldLeft(list, list(), x -> y -> append(x, map.apply(element)));
+        }
+
+        return Collections.unmodifiableList(result);
+    }
+
 }
