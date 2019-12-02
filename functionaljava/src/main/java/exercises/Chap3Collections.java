@@ -1,4 +1,4 @@
-package net.jetnet.collections;
+package exercises;
 
 import net.jetnet.functions.Effect;
 import net.jetnet.functions.Function;
@@ -11,7 +11,7 @@ import java.util.List;
 /*
 Chap 3 - iteration abstraction
  */
-public class CollectionUtils {
+public class Chap3Collections {
 
     public static <T> List<T> list() {
         return Collections.emptyList();
@@ -126,7 +126,7 @@ public class CollectionUtils {
     public static List<Integer> recursiveRange(Integer start, Integer end) {
         return end <= start ?
                 list() :
-                prepend(start, range(start++, end));
+                prepend(start, recursiveRange(start++, end));
     }
 
 }
