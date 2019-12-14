@@ -30,11 +30,10 @@ public class Chap4Recursion {
         if (n.equals(BigInteger.ZERO)) {
             return n;
         }
-        if(n.equals(BigInteger.ONE)){
+        if (n.equals(BigInteger.ONE)) {
             return acc1.add(acc2);
-        }
-        else {
-            return tailRecursiveFib(n.subtract(BigInteger.ONE), acc1.add(acc2) , acc1);
+        } else {
+            return tailRecursiveFib(n.subtract(BigInteger.ONE), acc1.add(acc2), acc1);
         }
     }
 
@@ -45,11 +44,10 @@ public class Chap4Recursion {
         if (n.equals(BigInteger.ZERO)) {
             return ret(n);
         }
-        if(n.equals(BigInteger.ONE)){
+        if (n.equals(BigInteger.ONE)) {
             return ret(acc1.add(acc2));
-        }
-        else {
-            return sus(() -> stackSafeTailRecursiveFib_(n.subtract(BigInteger.ONE), acc1.add(acc2) , acc1));
+        } else {
+            return sus(() -> stackSafeTailRecursiveFib_(n.subtract(BigInteger.ONE), acc1.add(acc2), acc1));
         }
     }
 
@@ -58,12 +56,34 @@ public class Chap4Recursion {
     }
 
     /*
+    4.9 Write a stack safe tail recursive fib returning a comma separated sequence of the values from 0->n
+     */
+    private static TailCall<List<BigInteger>> fibSequence_(BigInteger n, List<BigInteger> series, BigInteger acc1, BigInteger acc2) {
+        return n.equals(BigInteger.ZERO) ?
+                ret(series) :
+                sus(() -> fibSequence_(n.subtract(BigInteger.ONE), append(series, acc1.add(acc2)), acc1.add(acc2), acc1));
+    }
+
+    public static String fibSequence(int n) {
+        List<BigInteger> sequence = fibSequence_(BigInteger.valueOf(n), list(BigInteger.ZERO), BigInteger.ONE, BigInteger.ZERO).eval();
+        return toSeqStr(sequence, ", ");
+    }
+
+    private static String toSeqStr(List<BigInteger> seq, String delim) {
+        return seq.isEmpty() ?
+                "" :
+                tail(seq).isEmpty() ?
+                        head(seq).toString() :
+                        head(seq) + foldLeft(tail(seq), new StringBuilder(), x -> y -> x.append(delim).append(y)).toString();
+    }
+
+    /*
     4.3: Create a stack-safe foldLeft
      */
     private static <T, U> TailCall<U> foldLeft_(List<T> list, U identity, Function<U, Function<T, U>> fold) {
         return list.isEmpty() ?
                 ret(identity) :
-                sus(() -> foldLeft_(tail(list), fold.apply(identity).apply(head(list)) , fold));
+                sus(() -> foldLeft_(tail(list), fold.apply(identity).apply(head(list)), fold));
     }
 
     public static <T, U> U foldLeft(List<T> list, U identity, Function<U, Function<T, U>> fold) {
@@ -101,21 +121,21 @@ public class Chap4Recursion {
     4.6 Write a function composeAll that takes a list of functions T to T
     and returns a result of composing all the functions in the list
      */
-    public static <T> Function<T, T> composeAll(List<Function<T, T>> functions) {
+    public static <T> Function<T, T> unsafeComposeAll(List<Function<T, T>> functions) {
         return foldLeft(functions, identity(), x -> y -> x.compose(y));
     }
 
     /*
     4.7 Make the composeAll stack-safe
      */
-    public static <T> Function<T, T> safeComposeAll(List<Function<T, T>> functions) {
+    public static <T> Function<T, T> composeAll(List<Function<T, T>> functions) {
         return x -> foldLeft(reverse(functions), x, a -> b -> b.apply(a));
     }
 
     /*
     4.8 composeAll must be reversed!
      */
-    public static <T> Function<T, T> safeAndThenAll(List<Function<T, T>> functions) {
+    public static <T> Function<T, T> andThenAll(List<Function<T, T>> functions) {
         return x -> foldLeft(functions, x, a -> b -> b.apply(a));
     }
 

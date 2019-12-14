@@ -1,3 +1,4 @@
+import exercises.Chap4Recursion;
 import net.jetnet.functions.Function;
 import org.junit.jupiter.api.Test;
 
@@ -7,8 +8,7 @@ import static exercises.Chap3Collections.list;
 import static exercises.Chap3Collections.mapLeft;
 import static exercises.Chap3Collections.range;
 import static exercises.Chap4Recursion.composeAll;
-import static exercises.Chap4Recursion.safeAndThenAll;
-import static exercises.Chap4Recursion.safeComposeAll;
+import static exercises.Chap4Recursion.andThenAll;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FunctionUnitTests {
@@ -38,7 +38,7 @@ public class FunctionUnitTests {
         Function<String, String> f2 = x -> "(b" + x + ")";
         Function<String, String> f3 = x -> "(c" + x + ")";
 
-        System.out.println(safeComposeAll(list(f1, f2, f3)).apply("x"));
-        System.out.println(safeAndThenAll(list(f1, f2, f3)).apply("x"));
+        System.out.println(Chap4Recursion.composeAll(list(f1, f2, f3)).apply("x"));
+        System.out.println(andThenAll(list(f1, f2, f3)).apply("x"));
     }
 }
