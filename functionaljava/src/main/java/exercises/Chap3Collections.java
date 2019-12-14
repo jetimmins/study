@@ -85,11 +85,18 @@ public class Chap3Collections {
 
     public static <T, U> List<U> map(List<T> list, Function<T, U> map) {
         List<U> result = list();
-        for (T element : list) {
-            foldLeft(list, list(), x -> y -> append(x, map.apply(element)));
+        for (T value : list) {
+            result.add(map.apply(value));
         }
-
         return Collections.unmodifiableList(result);
+    }
+
+    public static <T, U> List<U> mapLeft(List<T> list, Function<T, U> map) {
+        return foldLeft(list, list(), x -> y -> append(x, map.apply(y)));
+    }
+
+    public static <T, U> List<U> mapRight(List<T> list, Function<T, U> map) {
+        return foldRight(list, list(), x -> y -> prepend(map.apply(x), y));
     }
 
     public static <T> void foreach(List<T> list, Effect<T> effect) {
@@ -102,7 +109,7 @@ public class Chap3Collections {
         List<Integer> list = list();
         int index = start;
         while (index < end) {
-            append(list, index);
+            list = append(list, index);
             index++;
         }
 

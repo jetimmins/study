@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import static exercises.Chap3Collections.*;
+import static net.jetnet.functions.Function.*;
 import static net.jetnet.functions.TailCall.ret;
 import static net.jetnet.functions.TailCall.sus;
 
@@ -96,6 +97,27 @@ public class Chap4Recursion {
         return recursiveFoldRight_(identity, reverse(list), fold).eval();
     }
 
+    /*
+    4.6 Write a function composeAll that takes a list of functions T to T
+    and returns a result of composing all the functions in the list
+     */
+    public static <T> Function<T, T> composeAll(List<Function<T, T>> functions) {
+        return foldLeft(functions, identity(), x -> y -> x.compose(y));
+    }
+
+    /*
+    4.7 Make the composeAll stack-safe
+     */
+    public static <T> Function<T, T> safeComposeAll(List<Function<T, T>> functions) {
+        return x -> foldLeft(reverse(functions), x, a -> b -> b.apply(a));
+    }
+
+    /*
+    4.8 composeAll must be reversed!
+     */
+    public static <T> Function<T, T> safeAndThenAll(List<Function<T, T>> functions) {
+        return x -> foldLeft(functions, x, a -> b -> b.apply(a));
+    }
 
 
 }
