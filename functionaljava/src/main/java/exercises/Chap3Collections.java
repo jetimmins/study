@@ -136,4 +136,14 @@ public class Chap3Collections {
                 prepend(start, recursiveRange(start++, end));
     }
 
+    public static <T> List<T> iterate(T seed, Function<T, T> f, int n) {
+        List<T> result = new ArrayList<>();
+        T temp = seed;
+        for (int i = 0; i < n; i++) {
+            result.add(temp);
+            temp = f.apply(temp);
+        }
+        return result;
+    }
+
 }

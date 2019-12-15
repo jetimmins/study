@@ -2,6 +2,7 @@ package exercises;
 
 import net.jetnet.functions.Function;
 import net.jetnet.functions.TailCall;
+import net.jetnet.functions.Tuple;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -12,6 +13,7 @@ import static net.jetnet.functions.TailCall.ret;
 import static net.jetnet.functions.TailCall.sus;
 
 public class Chap4Recursion {
+    private static final String COMMA_SEP = ", ";
 
     public static int add(int x, int y) {
         return addRec(x, y).eval();
@@ -66,7 +68,7 @@ public class Chap4Recursion {
 
     public static String fibSequence(int n) {
         List<BigInteger> sequence = fibSequence_(BigInteger.valueOf(n), list(BigInteger.ZERO), BigInteger.ONE, BigInteger.ZERO).eval();
-        return toSeqStr(sequence, ", ");
+        return toSeqStr(sequence, COMMA_SEP);
     }
 
     private static String toSeqStr(List<BigInteger> seq, String delim) {
@@ -75,6 +77,13 @@ public class Chap4Recursion {
                 tail(seq).isEmpty() ?
                         head(seq).toString() :
                         head(seq) + foldLeft(tail(seq), new StringBuilder(), x -> y -> x.append(delim).append(y)).toString();
+    }
+
+    public static String fiboCorecursive(int n) {
+        Tuple<BigInteger, BigInteger> seed = new Tuple<>(BigInteger.ZERO, BigInteger.ONE);
+        Function<Tuple<BigInteger, BigInteger>, Tuple<BigInteger, BigInteger>> next = x -> new Tuple<>(x._2, x._1.add(x._2));
+        List<BigInteger> list = map(iterate(seed, next, n + 1), x -> x._1);
+        return toSeqStr(list, COMMA_SEP);
     }
 
     /*
